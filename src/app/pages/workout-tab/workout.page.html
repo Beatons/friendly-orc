@@ -1,0 +1,15 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Workout List </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item (click)="addWorkout()">
+      <ion-label>
+        <ion-icon name="add-outline"></ion-icon> Add Workout
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

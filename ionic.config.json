@@ -1,0 +1,7 @@
+{
+  "name": "orc_app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
