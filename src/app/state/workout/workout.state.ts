@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import {
   Action,
   createSelector,
@@ -19,7 +20,6 @@ interface WorkoutStateModel {
   workoutList?: Workout[];
   exerciseList?: Exercise[];
 }
-
 @State<WorkoutStateModel>({
   name: 'workout',
   defaults: {
@@ -27,6 +27,7 @@ interface WorkoutStateModel {
     exerciseList: [],
   },
 })
+@Injectable()
 export class WorkoutState {
   @Selector()
   static workoutList(state: WorkoutStateModel) {
@@ -80,7 +81,7 @@ export class WorkoutState {
   addExercise(ctx: StateContext<WorkoutStateModel>, { exercise }: AddExercise) {
     const { exerciseList } = ctx.getState();
     ctx.patchState({
-      exerciseList: [...exerciseList, exercise],
+      exerciseList: [...(exerciseList || []), exercise],
     });
   }
   @Action(DeleteExercise)

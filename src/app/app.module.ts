@@ -18,7 +18,9 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    NgxsModule.forRoot([WorkoutState]),
+    NgxsModule.forRoot([WorkoutState], {
+      developmentMode: true,
+    }),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot(),
   ],

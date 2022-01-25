@@ -12,15 +12,21 @@
     <ion-label position="floating">Workout name</ion-label>
     <ion-input [formControl]="workoutNameControl"></ion-input>
   </ion-item>
-  <ion-item (click)="addExercise()">
-    <ion-label>
-      <ion-icon name="add-outline"></ion-icon> Add exercise
-    </ion-label>
+  <ion-item>
+    <ion-label>Exercise</ion-label>
+    <ion-select
+      [formControl]="exerciseControl"
+      (ionChange)="addExercise($event)"
+      placeholder="Add Exercise"
+    >
+      <ion-select-option
+        *ngFor="let exercise of exerciseList$ | async"
+        [value]="exercise.id"
+        >{{exercise.name}}</ion-select-option
+      >
+    </ion-select>
   </ion-item>
-  <!-- <ion-item
-    *ngFor="let exercise of workoutService.exerciseList$ | async"
-    (click)="editExercise(exercise)"
-  >
+  <ion-item *ngFor="let exercise of localExerciseList | async">
     <ion-label>
       {{exercise.name}}
       <ng-container [ngSwitch]="exercise.type">
@@ -38,7 +44,7 @@
         </ng-container>
       </ng-container>
     </ion-label>
-  </ion-item> -->
+  </ion-item>
   <ion-button expand="block" (click)="addWorkout()"> Submit workout</ion-button>
   <ion-button expand="block" color="danger" (click)="deleteWorkout()">
     Delete workout</ion-button

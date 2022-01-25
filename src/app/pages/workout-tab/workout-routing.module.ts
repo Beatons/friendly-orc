@@ -35,6 +35,7 @@ const routes: Routes = [
         (m) => m.AddWorkoutModule
       ),
   },
+
   {
     path: 'add-exercise',
     loadChildren: () =>

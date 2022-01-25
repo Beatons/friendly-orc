@@ -9,28 +9,35 @@ const routes: Routes = [
     children: [
       {
         path: 'workout-tab',
-        loadChildren: () => import('../workout-tab/workout.module').then(m => m.WorkoutPageModule)
+        loadChildren: () =>
+          import('../workout-tab/workout.module').then(
+            (m) => m.WorkoutPageModule
+          ),
       },
       {
-        path: 'tab2',
-        loadChildren: () => import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+        path: 'workout-now',
+        loadChildren: () =>
+          import('../workout-now/workout-now.module').then(
+            (m) => m.WorkoutNowPageModule
+          ),
       },
       {
         path: 'tab3',
-        loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+        loadChildren: () =>
+          import('../tab3/tab3.module').then((m) => m.Tab3PageModule),
       },
       {
         path: '',
         redirectTo: '/tabs/workout-tab',
-        pathMatch: 'full'
-      }
-    ]
+        pathMatch: 'full',
+      },
+    ],
   },
   {
     path: '',
     redirectTo: '/tabs/workout-tab',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({

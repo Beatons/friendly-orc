@@ -1,28 +1,39 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NavController } from '@ionic/angular';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import {
   AddWorkout,
   DeleteWorkout,
   EditWorkout,
 } from 'src/app/state/workout/workout.actions';
-import { v4 as uuidv4 } from 'uuid';
 import { ActivatedRoute } from '@angular/router';
 import { WorkoutState } from 'src/app/state/workout/workout.state';
-import { filter, pluck, switchMap, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import {
+  filter,
+  first,
+  map,
+  pluck,
+  switchMap,
+  takeUntil,
+} from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { Exercise, Workout } from 'src/libs/interfaces/workout';
+import { v4 as uuidv4 } from 'uuid';
+
 @Component({
   selector: 'app-add-workout',
   templateUrl: './add-workout.page.html',
   styleUrls: ['./add-workout.page.scss'],
 })
 export class AddWorkoutPage implements OnInit, OnDestroy {
+  @Select(WorkoutState.exerciseList) exerciseList$: Observable<Exercise[]>;
   workoutNameControl = new FormControl();
+  exerciseControl = new FormControl();
   destroy$ = new Subject();
   isEditing = false;
   exercise;
+  localExerciseList = new BehaviorSubject([]);
   constructor(
     private readonly route: ActivatedRoute,
     private nav: NavController,
@@ -40,15 +51,22 @@ export class AddWorkoutPage implements OnInit, OnDestroy {
       .subscribe((res: Workout) => {
         this.isEditing = true;
         this.workoutNameControl.patchValue(res.name);
+        this.localExerciseList.next(res.exercises);
       });
   }
 
-  addExercise() {
-    this.nav.navigateForward(['/', 'tabs', 'workout-tab', 'add-exercise']);
+  addExercise(event) {
+    if (event.detail.value) {
+      this.exerciseList$.pipe(first()).subscribe((list) => {
+        this.localExerciseList.next([
+          ...this.localExerciseList.value,
+          list.find((exercise) => exercise.id === event.detail.value),
+        ]);
+      });
+      this.exerciseControl.patchValue(null);
+    }
   }
-  editExercise(id: Exercise) {
-    this.nav.navigateForward(['/', 'tabs', 'workout-tab', 'edit-exercise', id]);
-  }
+  editExercise(id: Exercise) {}
   deleteWorkout() {
     this.store
       .dispatch(new DeleteWorkout(this.route.snapshot.params.id))
@@ -58,20 +76,21 @@ export class AddWorkoutPage implements OnInit, OnDestroy {
   }
   addWorkout() {
     if (!this.isEditing) {
-      //   this.store.dispatch(
-      //     new AddWorkout({
-      //       exercises: this.workoutService.getExercises(),
-      //       name: this.workoutNameControl.value,
-      //       id: uuidv4(),
-      //     })
-      //   );
-      // } else {
-      //   this.store.dispatch(
-      //     new EditWorkout({
-      //       exercises: this.workoutService.getExercises(),
-      //       name: this.workoutNameControl.value,
-      //     })
-      //   );
+      this.store.dispatch(
+        new AddWorkout({
+          exercises: this.localExerciseList.value,
+          name: this.workoutNameControl.value,
+          id: uuidv4(),
+        })
+      );
+    } else {
+      this.store.dispatch(
+        new EditWorkout({
+          exercises: this.localExerciseList.value,
+          name: this.workoutNameControl.value,
+          id: this.route.snapshot.params.id,
+        })
+      );
     }
     this.nav.pop();
   }
