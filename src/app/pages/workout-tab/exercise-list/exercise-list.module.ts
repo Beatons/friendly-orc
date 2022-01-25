@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AddWorkoutPage } from './add-workout.page';
+import { ExerciseListPage } from './exercise-list.page';
 import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -8,12 +8,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 const routes: Routes = [
   {
     path: '',
-    component: AddWorkoutPage,
+    component: ExerciseListPage,
   },
 ];
 
 @NgModule({
-  declarations: [AddWorkoutPage],
+  declarations: [ExerciseListPage],
   imports: [
     FormsModule,
     IonicModule,
@@ -23,4 +23,4 @@ const routes: Routes = [
     RouterModule.forChild(routes),
   ],
 })
-export class AddWorkoutModule {}
+export class ExerciseListModule {}

@@ -5,11 +5,28 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list>
-    <ion-item (click)="addWorkout()">
+  <div class="button_rows">
+    <ion-card (click)="exerciseList()">
+      <ion-card-header>
+        <ion-card-title>Exercises</ion-card-title>
+      </ion-card-header>
+    </ion-card>
+    <ion-card (click)="workoutList()">
+      <ion-card-header>
+        <ion-card-title>Workout</ion-card-title>
+      </ion-card-header>
+    </ion-card>
+  </div>
+  <!-- <ion-item (click)="addWorkout()">
       <ion-label>
         <ion-icon name="add-outline"></ion-icon> Add Workout
       </ion-label>
     </ion-item>
-  </ion-list>
+
+    <ion-item
+      *ngFor="let workout of workoutList$ | async"
+      (click)="editExercise(workout.id)"
+    >
+      <ion-label> {{workout.name}} </ion-label>
+    </ion-item> -->
 </ion-content>

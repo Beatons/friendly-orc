@@ -11,9 +11,11 @@ import { Workout } from 'src/libs/interfaces/workout';
   styleUrls: ['workout.page.scss'],
 })
 export class WorkoutPage {
-  @Select(WorkoutState.workoutList) workoutList$: Observable<Workout[]>;
   constructor(private nav: NavController) {}
-  addWorkout() {
-    this.nav.navigateForward(['/', 'tabs', 'workout-tab', 'add-workout']);
+  workoutList() {
+    this.nav.navigateForward(['/', 'tabs', 'workout-tab', 'workout-list']);
+  }
+  exerciseList() {
+    this.nav.navigateForward(['/', 'tabs', 'workout-tab', 'exercise-list']);
   }
 }

@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title> Workout List </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item (click)="addWorkout()">
+      <ion-label>
+        <ion-icon name="add-outline"></ion-icon> Add Workout
+      </ion-label>
+    </ion-item>
+
+    <ion-item
+      *ngFor="let workout of workoutList$ | async"
+      (click)="editWorkout(workout.id)"
+    >
+      <ion-label> {{workout.name}} </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

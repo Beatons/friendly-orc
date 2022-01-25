@@ -10,11 +10,37 @@
 <ion-content [fullscreen]="true">
   <ion-item>
     <ion-label position="floating">Workout name</ion-label>
-    <ion-input></ion-input>
+    <ion-input [formControl]="workoutNameControl"></ion-input>
   </ion-item>
   <ion-item (click)="addExercise()">
     <ion-label>
       <ion-icon name="add-outline"></ion-icon> Add exercise
     </ion-label>
   </ion-item>
+  <!-- <ion-item
+    *ngFor="let exercise of workoutService.exerciseList$ | async"
+    (click)="editExercise(exercise)"
+  >
+    <ion-label>
+      {{exercise.name}}
+      <ng-container [ngSwitch]="exercise.type">
+        <ng-container *ngSwitchCase="'time'">
+          {{exercise.seconds}} Seconds
+        </ng-container>
+        <ng-container *ngSwitchCase="'distance'">
+          {{exercise.distance}} Meters
+        </ng-container>
+        <ng-container *ngSwitchCase="'calories'">
+          {{exercise.calories}} Kcal
+        </ng-container>
+        <ng-container *ngSwitchCase="'reps'">
+          {{exercise.sets}} x {{exercise.reps}} x {{exercise.weight}}
+        </ng-container>
+      </ng-container>
+    </ion-label>
+  </ion-item> -->
+  <ion-button expand="block" (click)="addWorkout()"> Submit workout</ion-button>
+  <ion-button expand="block" color="danger" (click)="deleteWorkout()">
+    Delete workout</ion-button
+  >
 </ion-content>

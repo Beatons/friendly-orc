@@ -37,6 +37,10 @@
     <ion-label position="floating">Repetitions</ion-label>
     <ion-input type="number" formControlName="reps"></ion-input>
   </ion-item>
+  <ion-item>
+    <ion-label position="floating">Weight</ion-label>
+    <ion-input type="number" formControlName="weight"></ion-input>
+  </ion-item>
   <ion-item *ngIf="exerciseGroup.get('type').value === 'time'">
     <ion-label position="floating">Minutes</ion-label>
     <ion-input type="number" formControlName="minutes"></ion-input>

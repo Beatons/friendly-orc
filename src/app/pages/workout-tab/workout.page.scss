@@ -1,0 +1,7 @@
+.button_rows {
+  display: flex;
+  flex-direction: row;
+  ion-card {
+    flex: 1;
+  }
+}
