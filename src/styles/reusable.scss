@@ -1,3 +1,28 @@
+$sizes: (
+  '-xs': 4px,
+  '-sm': 8px,
+  '': 16px,
+  '-md': 24px,
+  '-lg': 32px,
+  '-xl': 56px,
+);
+$directions: '', '-left', '-top', '-right', '-bottom';
+
+@each $direction in $directions {
+  @each $name, $size in $sizes {
+    .pad#{$direction}#{$name} {
+      padding#{$direction}: $size;
+    }
+  }
+}
+
+@each $direction in $directions {
+  @each $name, $size in $sizes {
+    .push#{$direction}#{$name} {
+      margin#{$direction}: $size;
+    }
+  }
+}
 .text-center {
   text-align: center;
 }

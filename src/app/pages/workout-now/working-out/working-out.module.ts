@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { WorkingOutPage } from './working-out.page';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from 'src/app/core/shared.module';
 
 const routes = [
   {
@@ -13,7 +14,12 @@ const routes = [
 
 @NgModule({
   declarations: [WorkingOutPage],
-  imports: [CommonModule, IonicModule, RouterModule.forChild(routes)],
+  imports: [
+    CommonModule,
+    IonicModule,
+    SharedModule,
+    RouterModule.forChild(routes),
+  ],
   exports: [],
   providers: [],
 })

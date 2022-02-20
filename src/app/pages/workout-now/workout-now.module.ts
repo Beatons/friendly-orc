@@ -1,9 +1,10 @@
 import { IonicModule } from '@ionic/angular';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WorkoutNowPage } from './workout-now.page';
+import { SharedModule } from 'src/app/core/shared.module';
+import { CommonModule } from '@angular/common';
 
 const routes: Routes = [
   {
@@ -21,8 +22,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    IonicModule,
     CommonModule,
+    IonicModule,
     FormsModule,
     RouterModule.forChild(routes),
   ],

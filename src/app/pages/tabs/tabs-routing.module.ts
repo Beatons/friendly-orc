@@ -22,9 +22,9 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'tab3',
+        path: 'stats',
         loadChildren: () =>
-          import('../tab3/tab3.module').then((m) => m.Tab3PageModule),
+          import('../stats/stats.module').then((m) => m.StatsPageModule),
       },
       {
         path: '',
