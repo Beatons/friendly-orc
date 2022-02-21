@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { WorkoutState } from './state/workout/workout.state';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { StatsState } from './state/stats/stats.state';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,7 +19,7 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    NgxsModule.forRoot([WorkoutState], {
+    NgxsModule.forRoot([WorkoutState, StatsState], {
       developmentMode: true,
     }),
     NgxsReduxDevtoolsPluginModule.forRoot(),

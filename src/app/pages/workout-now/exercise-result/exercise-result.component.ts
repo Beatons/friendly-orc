@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Store } from '@ngxs/store';
 import { first, map, pluck } from 'rxjs/operators';
+import { AddStats } from 'src/app/state/stats/stats.actions';
 import { WorkoutState } from 'src/app/state/workout/workout.state';
 import { Workout } from 'src/libs/interfaces/workout';
 import { WorkoutNowService } from '../workout-now.service';
@@ -30,17 +31,23 @@ export class ExerciseResultPage implements OnInit {
     seconds: new FormControl(),
   });
   constructor(
+    private readonly nav: NavController,
     private readonly workoutService: WorkoutNowService,
     private readonly route: ActivatedRoute,
-    private readonly navCtrl: NavController,
     private readonly store: Store
   ) {}
   ngOnInit(): void {
     this.workout$.pipe(first()).subscribe((workout: Workout) => {
       const exercise = workout.exercises[this.workoutService.currentExercise];
-      console.log(exercise);
       this.resultFormGroup.patchValue(exercise);
     });
   }
-  submit() {}
+  submit() {
+    this.exercise$.pipe(first()).subscribe((exercise) => {
+      console.log(exercise);
+      const newExercise = { ...exercise, ...this.resultFormGroup.value };
+      this.store.dispatch(new AddStats(newExercise));
+      this.nav.back();
+    });
+  }
 }

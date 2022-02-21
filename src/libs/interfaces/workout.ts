@@ -12,6 +12,7 @@ export interface Exercise {
   sets?: number;
   seconds?: number;
   weight?: number;
+  date: Date;
 }
 
 export interface Workout {

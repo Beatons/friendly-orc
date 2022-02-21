@@ -9,10 +9,25 @@
     <div class="push text-center" style="font-size: 80px">
       {{ workoutService.timer$ | async | clock }}
     </div>
-    <ion-button expand="full" (click)="startExercise()">
+    <ion-button
+      *ngIf="workoutService.canPause$ | async"
+      expand="full"
+      (click)="startExercise()"
+    >
+      Pause exercise
+    </ion-button>
+    <ion-button
+      *ngIf="workoutService.canStart$ | async"
+      expand="full"
+      (click)="startExercise()"
+    >
       Start exercise
     </ion-button>
-    <ion-button expand="full" (click)="nextExercise()">
+    <ion-button
+      *ngIf="workoutService.canMoveOn$ | async"
+      expand="full"
+      (click)="nextExercise()"
+    >
       Next exercise
     </ion-button>
     <ion-list>

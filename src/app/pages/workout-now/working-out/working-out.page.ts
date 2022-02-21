@@ -12,6 +12,7 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 import { WorkoutState } from 'src/app/state/workout/workout.state';
+import { Workout } from 'src/libs/interfaces/workout';
 import { WorkoutNowService } from '../workout-now.service';
 
 @Component({
@@ -35,7 +36,8 @@ export class WorkingOutPage implements OnInit {
     this.workoutService.pauseExercise();
   }
   nextExercise() {
-    this.workout$.pipe(first()).subscribe((workout) => {
+    this.workoutService.pauseExercise();
+    this.workout$.pipe(first()).subscribe((workout: Workout) => {
       this.nav.navigateForward([
         '/',
         'tabs',
@@ -43,6 +45,12 @@ export class WorkingOutPage implements OnInit {
         'exercise-result',
         workout.id,
       ]);
+      if (
+        workout.exercises.length - 1 ===
+        this.workoutService.currentExercise
+      ) {
+        this.workoutService.endWorkout();
+      }
     });
   }
   startExercise() {

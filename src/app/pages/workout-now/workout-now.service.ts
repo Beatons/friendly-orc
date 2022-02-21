@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngxs/store';
 import { BehaviorSubject, interval } from 'rxjs';
 import { map, startWith, withLatestFrom } from 'rxjs/operators';
 export type StateType =
   | 'STOP'
-  | 'RUN'
   | 'RUNNING'
   | 'PAUSED'
   | 'REST'
   | 'RESTING'
+  | 'END'
   | 'RESTART';
 
 @Injectable({
@@ -17,15 +15,21 @@ export type StateType =
 })
 export class WorkoutNowService {
   exerciseState = new BehaviorSubject<StateType>('STOP');
+  canStart$ = this.exerciseState
+    .asObservable()
+    .pipe(map((state) => state === 'PAUSED' || state === 'STOP'));
+  canMoveOn$ = this.exerciseState
+    .asObservable()
+    .pipe(map((state) => state === 'RUNNING' || state === 'PAUSED'));
+  canPause$ = this.exerciseState
+    .asObservable()
+    .pipe(map((state) => state === 'RUNNING' || state === 'RESTING'));
   times = [];
   timer = new BehaviorSubject(0);
   timer$ = this.timer.asObservable();
   currentExercise = 0;
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly store: Store
-  ) {
+  constructor() {
     console.log('initialized');
     interval(1000)
       .pipe(
@@ -34,18 +38,20 @@ export class WorkoutNowService {
         startWith(0)
       )
       .subscribe((res: StateType) => {
-        console.log('counter');
+        console.log('counter', res);
         if (res === 'REST') {
           this.exerciseState.next('RESTING');
-        } else if (res === 'RUN') {
-          this.exerciseState.next('RUNNING');
         } else if (res === 'RESTING') {
-          this.timer.next(this.timer.value + 1);
+          if (this.timer.value < 120) {
+            this.timer.next(this.timer.value + 1);
+          } else {
+            this.exerciseState.next('RESTART');
+          }
         } else if (res === 'RUNNING') {
           this.timer.next(this.timer.value + 1);
         } else if (res === 'RESTART') {
           this.timer.next(0);
-          this.exerciseState.next('RUN');
+          this.exerciseState.next('RUNNING');
         }
       });
   }
@@ -54,15 +60,19 @@ export class WorkoutNowService {
     this.exerciseState.next('PAUSED');
   }
   nextExercise() {
-    this.exerciseState.next('STOP');
-    this.exerciseState.next('RESTART');
-    ++this.currentExercise;
+    if (this.exerciseState.value !== 'END') {
+      this.exerciseState.next('RESTART');
+      ++this.currentExercise;
+    }
   }
   startExercise() {
     if (this.exerciseState.value !== 'RUNNING') {
-      this.exerciseState.next('RUN');
+      this.exerciseState.next('RUNNING');
     } else {
       this.exerciseState.next('PAUSED');
     }
+  }
+  endWorkout() {
+    this.exerciseState.next('END');
   }
 }
