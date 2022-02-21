@@ -27,26 +27,27 @@
     </ion-select>
   </ion-item>
   <ion-item *ngFor="let exercise of localExerciseList | async">
-    <ion-label>
-      {{exercise.name}}
-      <ng-container [ngSwitch]="exercise.type">
-        <ng-container *ngSwitchCase="'time'">
-          {{exercise.seconds}} Seconds
-        </ng-container>
-        <ng-container *ngSwitchCase="'distance'">
-          {{exercise.distance}} Meters
-        </ng-container>
-        <ng-container *ngSwitchCase="'calories'">
-          {{exercise.calories}} Kcal
-        </ng-container>
-        <ng-container *ngSwitchCase="'reps'">
-          {{exercise.sets}} x {{exercise.reps}} x {{exercise.weight}}
-        </ng-container>
+    <ion-label> {{exercise.name}} </ion-label>
+    <ng-container [ngSwitch]="exercise.type">
+      <ng-container *ngSwitchCase="'time'">
+        {{exercise.seconds}} Seconds
       </ng-container>
-    </ion-label>
+      <ng-container *ngSwitchCase="'distance'">
+        {{exercise.distance}} Meters
+      </ng-container>
+      <ng-container *ngSwitchCase="'calories'">
+        {{exercise.calories}} Kcal
+      </ng-container>
+      <ng-container *ngSwitchCase="'repetions'">
+        {{exercise.sets}} x {{exercise.reps}} x {{exercise.weight}}kg
+      </ng-container>
+    </ng-container>
+    <ion-icon
+      slot="end"
+      (click)="deleteExercise(exercise); $event.stopPropagation()"
+      style="color: red; cursor: pointer"
+      name="trash-outline"
+    ></ion-icon>
   </ion-item>
   <ion-button expand="block" (click)="addWorkout()"> Submit workout</ion-button>
-  <ion-button expand="block" color="danger" (click)="deleteWorkout()">
-    Delete workout</ion-button
-  >
 </ion-content>

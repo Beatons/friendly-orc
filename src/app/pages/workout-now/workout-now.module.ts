@@ -18,6 +18,13 @@ const routes: Routes = [
         (m) => m.WorkingOutPageModule
       ),
   },
+  {
+    path: 'exercise-result/:id',
+    loadChildren: () =>
+      import('./exercise-result/exercise-result.module').then(
+        (m) => m.ExerciseResultModule
+      ),
+  },
 ];
 
 @NgModule({

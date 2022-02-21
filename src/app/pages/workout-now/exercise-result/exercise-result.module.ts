@@ -1,27 +1,29 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WorkoutListPage } from './workout-list.page';
-import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/core/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ExerciseResultPage } from './exercise-result.component';
+import { RouterModule } from '@angular/router';
 
-const routes: Routes = [
+const routes = [
   {
     path: '',
-    component: WorkoutListPage,
+    component: ExerciseResultPage,
   },
 ];
 
 @NgModule({
-  declarations: [WorkoutListPage],
+  declarations: [ExerciseResultPage],
   imports: [
-    FormsModule,
+    CommonModule,
     IonicModule,
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
   ],
+  exports: [],
+  providers: [],
 })
-export class WorkoutListModule {}
+export class ExerciseResultModule {}

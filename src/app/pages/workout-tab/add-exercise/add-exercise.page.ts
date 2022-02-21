@@ -6,7 +6,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { WorkoutState } from 'src/app/state/workout/workout.state';
-import { AddExercise } from 'src/app/state/workout/workout.actions';
+import {
+  AddExercise,
+  EditExercise,
+} from 'src/app/state/workout/workout.actions';
 
 @Component({
   selector: 'app-add-exercise',
@@ -25,6 +28,8 @@ export class AddExercisePage implements OnInit, OnDestroy {
     seconds: new FormControl(),
     weight: new FormControl(),
   });
+  exerciseExist = false;
+  exercise;
   constructor(
     private readonly store: Store,
     private readonly route: ActivatedRoute,
@@ -35,17 +40,24 @@ export class AddExercisePage implements OnInit, OnDestroy {
     this.store
       .select(WorkoutState.exerciseById(this.route.snapshot.params.id))
       .subscribe((exercise) => {
+        this.exercise = exercise;
         this.exerciseGroup.patchValue(exercise);
+        this.exerciseExist = true;
       });
   }
   submit() {
     const { seconds, minutes, ...rest } = this.exerciseGroup.value;
     const result = {
       ...rest,
-      id: uuidv4(),
+      id: this.exercise?.id ? this.exercise?.id : uuidv4(),
       seconds: seconds + minutes * SECONDS_IN_MINUTE,
     };
-    this.store.dispatch(new AddExercise(result));
+    console.log(this.exerciseExist);
+    if (this.exerciseExist) {
+      this.store.dispatch(new EditExercise(result));
+    } else {
+      this.store.dispatch(new AddExercise(result));
+    }
     this.nav.pop();
   }
   ngOnDestroy(): void {}

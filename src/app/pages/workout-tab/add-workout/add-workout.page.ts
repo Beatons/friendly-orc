@@ -66,14 +66,12 @@ export class AddWorkoutPage implements OnInit, OnDestroy {
       this.exerciseControl.patchValue(null);
     }
   }
-  editExercise(id: Exercise) {}
-  deleteWorkout() {
-    this.store
-      .dispatch(new DeleteWorkout(this.route.snapshot.params.id))
-      .subscribe(() => {
-        this.nav.navigateBack(['/', 'tabs', 'workout-tab']);
-      });
+  deleteExercise(index) {
+    this.localExerciseList.next(
+      this.localExerciseList.value.filter((e, i) => i === index)
+    );
   }
+  editExercise(id: Exercise) {}
   addWorkout() {
     if (!this.isEditing) {
       this.store.dispatch(

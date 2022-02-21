@@ -4,6 +4,15 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title> Workout List </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleTrashMode()">
+        <ion-icon
+          style="cursor: pointer"
+          slot="icon-only"
+          name="trash-outline"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -19,7 +28,14 @@
       *ngFor="let workout of workoutList$ | async"
       (click)="editWorkout(workout.id)"
     >
-      <ion-label> {{workout.name}} </ion-label>
+      <ion-label>{{ workout.name }}</ion-label>
+      <ion-icon
+        *ngIf="showTrashIcons"
+        (click)="deleteWorkout(workout); $event.stopPropagation()"
+        slot="end"
+        style="color: red; cursor: pointer"
+        name="trash-outline"
+      ></ion-icon>
     </ion-item>
   </ion-list>
 </ion-content>

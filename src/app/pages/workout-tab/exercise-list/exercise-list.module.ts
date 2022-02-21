@@ -4,6 +4,7 @@ import { ExerciseListPage } from './exercise-list.page';
 import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from 'src/app/core/shared.module';
 
 const routes: Routes = [
   {
@@ -17,7 +18,7 @@ const routes: Routes = [
   imports: [
     FormsModule,
     IonicModule,
-    CommonModule,
+    SharedModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
