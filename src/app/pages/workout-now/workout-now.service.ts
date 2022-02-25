@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, interval } from 'rxjs';
-import { map, startWith, withLatestFrom } from 'rxjs/operators';
+import { BehaviorSubject, interval, Subject } from 'rxjs';
+import { map, startWith, takeUntil, withLatestFrom } from 'rxjs/operators';
 export type StateType =
   | 'STOP'
   | 'RUNNING'
@@ -24,18 +24,22 @@ export class WorkoutNowService {
   canPause$ = this.exerciseState
     .asObservable()
     .pipe(map((state) => state === 'RUNNING' || state === 'RESTING'));
+  ended$ = this.exerciseState
+    .asObservable()
+    .pipe(map((state) => state === 'END'));
   times = [];
   timer = new BehaviorSubject(0);
   timer$ = this.timer.asObservable();
   currentExercise = 0;
+  destroy$ = new Subject();
 
-  constructor() {
-    console.log('initialized');
+  initWorkout() {
     interval(1000)
       .pipe(
         withLatestFrom(this.exerciseState.asObservable()),
         map((res) => res[1]),
-        startWith(0)
+        startWith(0),
+        takeUntil(this.destroy$)
       )
       .subscribe((res: StateType) => {
         console.log('counter', res);
@@ -55,7 +59,10 @@ export class WorkoutNowService {
         }
       });
   }
-  initWorkout() {}
+  destroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
   pauseExercise() {
     this.exerciseState.next('PAUSED');
   }

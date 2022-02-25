@@ -1,16 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Store } from '@ngxs/store';
-import { BehaviorSubject, interval, of } from 'rxjs';
-import {
-  first,
-  map,
-  mapTo,
-  startWith,
-  switchMap,
-  withLatestFrom,
-} from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { first, takeUntil } from 'rxjs/operators';
 import { WorkoutState } from 'src/app/state/workout/workout.state';
 import { Workout } from 'src/libs/interfaces/workout';
 import { WorkoutNowService } from '../workout-now.service';
@@ -20,10 +13,12 @@ import { WorkoutNowService } from '../workout-now.service';
   templateUrl: './working-out.page.html',
   styleUrls: ['./working-out.page.scss'],
 })
-export class WorkingOutPage implements OnInit {
+export class WorkingOutPage implements OnInit, OnDestroy {
   workout$ = this.store.select(
     WorkoutState.workoutById(this.route.snapshot.params.id)
   );
+  hasEnded = false;
+  destroy$ = new Subject();
   constructor(
     public readonly workoutService: WorkoutNowService,
     private readonly route: ActivatedRoute,
@@ -31,7 +26,19 @@ export class WorkingOutPage implements OnInit {
     private readonly nav: NavController
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.workoutService.initWorkout();
+    this.workoutService.ended$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((end) => {
+        this.hasEnded = end;
+      });
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.workoutService.destroy();
+  }
   pauseExercise() {
     this.workoutService.pauseExercise();
   }
@@ -52,6 +59,9 @@ export class WorkingOutPage implements OnInit {
         this.workoutService.endWorkout();
       }
     });
+  }
+  moveBack() {
+    this.nav.navigateBack(['/', 'tabs', 'workout-now']);
   }
   startExercise() {
     this.workoutService.startExercise();

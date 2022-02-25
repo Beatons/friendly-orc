@@ -6,54 +6,60 @@
   </ion-header>
 
   <ion-content [fullscreen]="true">
-    <div class="push text-center" style="font-size: 80px">
-      {{ workoutService.timer$ | async | clock }}
-    </div>
-    <ion-button
-      *ngIf="workoutService.canPause$ | async"
-      expand="full"
-      (click)="startExercise()"
-    >
-      Pause exercise
-    </ion-button>
-    <ion-button
-      *ngIf="workoutService.canStart$ | async"
-      expand="full"
-      (click)="startExercise()"
-    >
-      Start exercise
-    </ion-button>
-    <ion-button
-      *ngIf="workoutService.canMoveOn$ | async"
-      expand="full"
-      (click)="nextExercise()"
-    >
-      Next exercise
-    </ion-button>
-    <ion-list>
-      <ng-container *ngFor="let exercise of workout.exercises; let i = index">
-        <ion-item
-          *ngIf="workoutService.currentExercise <= i"
-          [ngClass]="{ 'active_exercise' : workoutService.currentExercise === i}"
-        >
-          <ion-label> {{ exercise.name }} </ion-label>
+    <ng-container *ngIf="!hasEnded">
+      <div class="push text-center" style="font-size: 80px">
+        {{ workoutService.timer$ | async | clock }}
+      </div>
+      <ion-button
+        *ngIf="workoutService.canPause$ | async"
+        expand="full"
+        (click)="startExercise()"
+      >
+        Pause exercise
+      </ion-button>
+      <ion-button
+        *ngIf="workoutService.canStart$ | async"
+        expand="full"
+        (click)="startExercise()"
+      >
+        Start exercise
+      </ion-button>
+      <ion-button
+        *ngIf="workoutService.canMoveOn$ | async"
+        expand="full"
+        (click)="nextExercise()"
+      >
+        Next exercise
+      </ion-button>
+      <ion-list>
+        <ng-container *ngFor="let exercise of workout.exercises; let i = index">
+          <ion-item
+            *ngIf="workoutService.currentExercise <= i"
+            [ngClass]="{ 'active_exercise' : workoutService.currentExercise === i}"
+          >
+            <ion-label> {{ exercise.name }} </ion-label>
 
-          <ng-container [ngSwitch]="exercise.type">
-            <ng-container *ngSwitchCase="'time'">
-              {{exercise.seconds}} Seconds
-            </ng-container>
-            <ng-container *ngSwitchCase="'distance'">
-              {{exercise.distance}} Meters
-            </ng-container>
-            <ng-container *ngSwitchCase="'calories'">
-              {{exercise.calories}} Kcal
-            </ng-container>
-            <ng-container *ngSwitchCase="'repetions'">
-              {{exercise.sets}} x {{exercise.reps}} x {{exercise.weight}}kg
-            </ng-container>
-          </ng-container></ion-item
-        >
-      </ng-container>
-    </ion-list>
+            <ng-container [ngSwitch]="exercise.type">
+              <ng-container *ngSwitchCase="'time'">
+                {{exercise.seconds}} Seconds
+              </ng-container>
+              <ng-container *ngSwitchCase="'distance'">
+                {{exercise.distance}} Meters
+              </ng-container>
+              <ng-container *ngSwitchCase="'calories'">
+                {{exercise.calories}} Kcal
+              </ng-container>
+              <ng-container *ngSwitchCase="'repetions'">
+                {{exercise.sets}} x {{exercise.reps}} x {{exercise.weight}}kg
+              </ng-container>
+            </ng-container></ion-item
+          >
+        </ng-container>
+      </ion-list>
+    </ng-container>
+    <ng-container *ngIf="hasEnded">
+      <h4 class="text-center">You've finished your workout!</h4>
+      <ion-button expand="full" (click)="moveBack()"> End workout </ion-button>
+    </ng-container>
   </ion-content>
 </ng-container>
