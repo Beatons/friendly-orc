@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { WorkoutNowService } from 'src/app/pages/workout-now/workout-now.service';
-import { Exercise } from 'src/libs/interfaces/workout';
-import { AddStats } from './stats.actions';
+import { ExerciseStats } from 'src/libs/interfaces/workout';
+import { AddStats, ClearStats } from './stats.actions';
 
 export interface StatsModel {
   statsCollection: {
-    [key: string]: Exercise[];
+    [key: string]: ExerciseStats;
   };
 }
 
@@ -27,16 +27,24 @@ export class StatsState {
   @Action(AddStats)
   addStats(ctx: StateContext<StatsModel>, { exercise }: AddStats) {
     const { statsCollection } = ctx.getState();
+    const { name, id, date, type, ...stats } = exercise;
     ctx.patchState({
       statsCollection: {
         ...statsCollection,
-        [exercise.id]: [
-          ...(statsCollection[exercise.id] || []),
-          { ...exercise, date: new Date() },
-        ],
+        [id]: {
+          name,
+          id,
+          type,
+          date: new Date(),
+          stats: [...(statsCollection[id]?.stats || []), stats],
+        },
       },
     });
 
     this.workoutService.nextExercise();
+  }
+  @Action(ClearStats)
+  clearState(ctx: StateContext<StatsModel>) {
+    ctx.patchState({ statsCollection: {} });
   }
 }

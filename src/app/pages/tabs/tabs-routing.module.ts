@@ -27,6 +27,13 @@ const routes: Routes = [
           import('../stats/stats.module').then((m) => m.StatsPageModule),
       },
       {
+        path: 'settings',
+        loadChildren: () =>
+          import('../settings/settings.module').then(
+            (m) => m.SettingsPageModule
+          ),
+      },
+      {
         path: '',
         redirectTo: '/tabs/workout-tab',
         pathMatch: 'full',
