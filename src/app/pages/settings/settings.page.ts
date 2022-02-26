@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { ClearStats } from 'src/app/state/stats/stats.actions';
 
 @Component({
   selector: 'app-settings',
@@ -6,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage implements OnInit {
-  constructor() {}
+  constructor(private readonly store: Store) {}
 
   ngOnInit(): void {}
+
+  resetStats() {
+    this.store.dispatch(new ClearStats());
+  }
 }

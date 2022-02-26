@@ -25,8 +25,8 @@ export interface ExerciseStats {
   id: string;
   name: string;
   type: string;
-  date: Date;
   stats: {
+    date: Date;
     distance?: number;
     calories?: number;
     reps?: number;

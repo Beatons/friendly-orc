@@ -1,0 +1,11 @@
+<ng-container *ngIf="stats$ | async as stats">
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>{{ stats.name}} </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content [fullscreen]="true">
+    <div id="chart"></div>
+  </ion-content>
+</ng-container>

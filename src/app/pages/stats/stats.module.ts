@@ -12,7 +12,19 @@ import { StatsPageRoutingModule } from './stats-routing.module';
     IonicModule,
     CommonModule,
     FormsModule,
-    RouterModule.forChild([{ path: '', component: StatsPage }]),
+    RouterModule.forChild([
+      {
+        path: '',
+        component: StatsPage,
+      },
+      {
+        path: ':id',
+        loadChildren: () =>
+          import('./exercise-stats/execise-stats.module').then(
+            (m) => m.ExerciseStatsPageModule
+          ),
+      },
+    ]),
     StatsPageRoutingModule,
   ],
   declarations: [StatsPage],

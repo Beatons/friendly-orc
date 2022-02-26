@@ -62,6 +62,8 @@ export class WorkoutNowService {
   destroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this.exerciseState.next('STOP');
+    this.currentExercise = 0;
   }
   pauseExercise() {
     this.exerciseState.next('PAUSED');

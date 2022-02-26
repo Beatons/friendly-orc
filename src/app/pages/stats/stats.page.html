@@ -4,4 +4,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true"> {{ stats$| async | json }} </ion-content>
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item *ngFor="let stat of stats$ | async" (click)="openCharts(stat.id)">
+      {{stat.name}}
+    </ion-item>
+  </ion-list>
+</ion-content>

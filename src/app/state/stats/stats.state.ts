@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import {
+  Action,
+  createSelector,
+  Selector,
+  State,
+  StateContext,
+} from '@ngxs/store';
 import { WorkoutNowService } from 'src/app/pages/workout-now/workout-now.service';
 import { ExerciseStats } from 'src/libs/interfaces/workout';
 import { AddStats, ClearStats } from './stats.actions';
@@ -19,9 +25,14 @@ export interface StatsModel {
 @Injectable()
 export class StatsState {
   constructor(public readonly workoutService: WorkoutNowService) {}
+  static statsById(id: string) {
+    return createSelector([StatsState.stats], (stats) =>
+      stats.find((stat) => stat.id === id)
+    );
+  }
   @Selector()
   static stats(state: StatsModel) {
-    return state.statsCollection;
+    return Object.values(state.statsCollection);
   }
 
   @Action(AddStats)
@@ -35,8 +46,10 @@ export class StatsState {
           name,
           id,
           type,
-          date: new Date(),
-          stats: [...(statsCollection[id]?.stats || []), stats],
+          stats: [
+            ...(statsCollection[id]?.stats || []),
+            { ...stats, date: new Date() },
+          ],
         },
       },
     });
